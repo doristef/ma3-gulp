@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 var less = require('gulp-less'); 
 var imagemin = require('gulp-imagemin');
+var jpegtran = require('imagemin-jpegtran');
+var mozjpeg = require('imagemin-mozjpeg');
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
  
@@ -20,7 +22,10 @@ gulp.task('watch-less', function() {
 // Task to minify images
 gulp.task('minify-images', function () {
     gulp.src('images/*')
-        .pipe(imagemin())
+        .pipe(imagemin([
+            jpegtran({progressive: true}),
+            mozjpeg({quality: '75'}) // set the quality percentage (out of 100)
+        ]))
         .pipe(gulp.dest('./dist/resized-images'))
 });
 
